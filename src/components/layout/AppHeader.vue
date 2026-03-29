@@ -79,6 +79,7 @@ const roleConfig = {
   super_admin: {color: "purple", text: "超级管理员"},
   admin: {color: "primary", text: "管理员"},
   student: {color: "green", text: "学生"},
+  guest: {color: "#0F766E", text: "访客"},
 };
 
 // 移动端菜单按钮直接派发全局事件

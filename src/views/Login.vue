@@ -49,23 +49,27 @@
               </v-select>
 
               <!-- 登录和注册按钮设置 -->
-              <div class="d-flex justify-center">
+              <div class="d-flex flex-column align-center ga-2 mt-0 mb-6">
                 <v-btn
                   type="submit"
                   style="width: 80%"
                   color="error"
-                  class="mb-4"
-                >登录
+                >
+                  登录
                 </v-btn>
-              </div>
-
-              <div class="d-flex justify-center">
                 <v-btn
                   style="width: 80%"
                   color="error"
-                  class="mb-4"
                   @click="dialogVisible = true"
-                >注册
+                >
+                  注册
+                </v-btn>
+                <v-btn
+                  style="width: 80%"
+                  color="error"
+                  @click="guestLogin"
+                >
+                  游客登录
                 </v-btn>
               </div>
 
@@ -227,12 +231,7 @@ async function register() {
   }
 }
 
-async function login() {
-  let data = {
-    username: userId.value,
-    password: password.value,
-    cname: cname.value,
-  };
+async function login_request(data) {
   try {
     const result = await request(APIS.login, {body: JSON.stringify(data)});
     if (result.code === 200) {
@@ -255,6 +254,27 @@ async function login() {
   } catch (error) {
   }
 }
+
+async function login() {
+  let data = {
+    username: userId.value,
+    password: password.value,
+    cname: cname.value,
+  };
+  await login_request(data);
+}
+
+// 游客登录：使用固定账号密码
+const guestLogin = async () => {
+  // 构造登录数据
+  const guestData = {
+    username: 'guest',
+    password: 'guestguest123',
+    cname: cname.value, // 沿用用户当前选择的课程
+  };
+
+  await login_request(guestData);
+};
 
 onMounted(async () => {
   try {
@@ -299,13 +319,13 @@ onMounted(async () => {
   border: 1px solid rgba(255, 255, 255, 0.3); /* 可选边框美化 */
 }
 
-/* 移动端适配 */
 .mobile-card {
-  height: 350px; /* 桌面端保持固定高度 */
+  min-height: 350px; /* 最小高度保持不变，实际高度由内容决定 */
+  height: auto;
 }
 
 .mobile-login-card {
-  height: 350px;
+  min-height: 350px;
   width: 300px;
 }
 
